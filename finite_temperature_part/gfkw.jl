@@ -50,7 +50,7 @@ for i in 1:10
     gfrw2 = zeros(ComplexF64, 24, 24, length(ws))
     gfrw2[13:24,13:24,:] .= gfrws[i]
     cpt = CPT(unitcell, lattice, hilbert, origiterms, referterms, gfrw2)
-    #k_path = ReciprocalPath(reciprocals([[√3/2, 1/2], [0, 1]]), hexagon"Γ-M-K-Γ, 120°", length=300)
+    k_path = ReciprocalPath(reciprocals([[√3/2, 1/2], [0, 1]]), hexagon"Γ-M-K-Γ, 120°", length=300)
     rz = ReciprocalZone(reciprocals([[√3/2, 1/2], [0, 1]]); length=100)
     @time Gs[i] = singleParticleGreenFunction(cpt, rz)
 end
