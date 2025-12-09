@@ -40,9 +40,10 @@ emu = e_min(elt, U1Irrep, U1Irrep; spin=:up)
 emd = e_min(elt, U1Irrep, U1Irrep; spin=:down)
 
 ts = 0:0.05:50
-n = 3
-D = 512
-trscheme=truncdim(D)
+n = 2
+trscheme=truncerr(1e-3)
+# D = 512
+# trscheme=truncdim(D)
 
 mu = 10
 bs = [0.08, 0.16, 0.18, 0.2, 0.22, 0.24, 0.28, 0.32, 0.4, 0.5, 0.68, 1]
@@ -54,7 +55,7 @@ addprocs(24)
 
 @everywhere begin
     using Pkg
-    Pkg.activate("../.")
+    Pkg.activate(".")
     using TensorKit
     using MPSKit
     using DynamicalCorrelators
@@ -80,56 +81,30 @@ addprocs(24)
 end
 
 
-# rho = load("./rhos/rho_mu=$(mu).jld2", "t=$(-im*round.(rs[i], digits=2))")
-# gfu = dcorrelator(rho, H, (epu, emu); 
-#                     trscheme=trscheme, 
-#                     times=ts, 
-#                     beta=bs[i], 
-#                     n=n, 
-#                     verbose=true, 
-#                     gf_path="./gfu/beta=$(bs[i])",
-#                     rho_path="./rhos/beta=$(bs[i])"
-#                     );
-
-# save("gfu_β=$(bs[i]).jld2", "gfu", gfu)
-
-# gfu = nothing
-# GC.gc()
-
-# gfd = dcorrelator(rho, H, (epd, emd); 
-#                     trscheme=trscheme, 
-#                     times=ts, 
-#                     beta=bs[i], 
-#                     n=n, 
-#                     verbose=true, 
-#                     gf_path="./gfd/beta=$(bs[i])",
-#                     rho_path="./rhos/beta=$(bs[i])"
-#                     );
-
-# save("gfd_β=$(bs[i]).jld2", "gfd", gfd)
-
-gs = load("tWSe2_V=20_GS.jld2", "sweep_6_ψ")
-
-# gfu = dcorrelator(gs, H, (epu, emu);
-#                     verbose=true, 
-#                     gf_path="./gfu/beta=Inf",
-#                     times=ts, 
-#                     n=n, 
-#                     trscheme=trscheme
-#                     )
-
-# save("gfu_β=Inf.jld2", "gfu", gfu)
-
-# @everywhere begin
-#     GC.gc()
-# end
-
-gfd = dcorrelator(gs, H, (epd, emd);
-                    verbose=true, 
-                    gf_path="./gfd/beta=Inf",
+rho = load("./rhos/rho_mu=$(mu).jld2", "t=$(-im*round.(rs[i], digits=2))")
+gfu = dcorrelator(rho, H, (epu, emu); 
+                    trscheme=trscheme, 
                     times=ts, 
+                    beta=bs[i], 
                     n=n, 
-                    trscheme=trscheme
-                    )
+                    verbose=true, 
+                    gf_path="./gfu/beta=$(bs[i])",
+                    rho_path="./rhos/beta=$(bs[i])"
+                    );
 
-save("gfd_β=Inf.jld2", "gfd", gfd)
+save("gfu_β=$(bs[i]).jld2", "gfu", gfu)
+
+gfu = nothing
+GC.gc()
+
+gfd = dcorrelator(rho, H, (epd, emd); 
+                    trscheme=trscheme, 
+                    times=ts, 
+                    beta=bs[i], 
+                    n=n, 
+                    verbose=true, 
+                    gf_path="./gfd/beta=$(bs[i])",
+                    rho_path="./rhos/beta=$(bs[i])"
+                    );
+
+save("gfd_β=$(bs[i]).jld2", "gfd", gfd)

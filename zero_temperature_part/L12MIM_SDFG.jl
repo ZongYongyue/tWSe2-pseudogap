@@ -1,6 +1,6 @@
 include("./tools.jl")
 using Distributed
-#开启多进程
+
 spawn(21)
 @everywhere begin
 include("./tools.jl")
