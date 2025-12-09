@@ -1,0 +1,5 @@
+[deps]
+ExactDiagonalization = "52dcaa32-6da7-11e9-20ef-755843cf72eb"
+QuantumClusterTheories = "097857cb-d914-4df9-ba6d-e02fb595fe10"
+QuantumLattices = "78ae1a1f-1d5d-5174-b61c-66e31b2346dc"
+TightBindingApproximation = "d3576f78-cb9d-4774-9dc5-b247cf392ff4"
